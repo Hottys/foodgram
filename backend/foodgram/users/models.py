@@ -14,6 +14,7 @@ class User(AbstractUser):
     login = models.CharField(
         verbose_name='Логин',
         max_length=150,
+        unique=True,
         blank=True,    
     )
     password = models.CharField(
@@ -48,6 +49,7 @@ class User(AbstractUser):
         )
 
     class Meta:
+        ordering = ('id',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         constraints = [
@@ -61,28 +63,29 @@ class User(AbstractUser):
         return self.username
 
 
-class Follow(models.Model):
+class Subscribe(models.Model):
     """Модель подписки на пользователя."""
     user = models.ForeignKey(
         User,
-        related_name='follower',
+        related_name='subscriber',
         verbose_name='Подписчик',
         on_delete=models.CASCADE,
     )
     author = models.ForeignKey(
         User,
-        related_name='following',
+        related_name='subscribing',
         verbose_name='Автор',
         on_delete=models.CASCADE,
     )
 
     class Meta:
+        ordering = ('-id',)
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
         constraints = [
             models.UniqueConstraint(
                 fields=('user', 'author'),
-                name='unique_follows',
+                name='unique_subscribe',
             ),
         ]
 

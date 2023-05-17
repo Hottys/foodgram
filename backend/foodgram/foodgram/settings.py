@@ -1,4 +1,3 @@
-# ПЕРЕД ОТПРАВКОЙ УДАЛИТЬ ВСЕ КОММЕНТАРИИ!!!!!
 import os
 from pathlib import Path
 
@@ -9,8 +8,7 @@ SECRET_KEY = 'django-insecure-p&p!!u&k0z=14v%fhh!89_ir&1#29ya3^i#)#6_18yz56mxzn1
 
 DEBUG = True
 
-# Не забыть убрать!
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = [] 
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -20,6 +18,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
+    'api.apps.ApiConfig',
+    'recipes.apps.RecipesConfig',
+    'colorfield',
 ]
 
 MIDDLEWARE = [

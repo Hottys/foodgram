@@ -1,25 +1,29 @@
 from django.contrib import admin
 
-from .models import Follow, User
+from .models import Subscribe, User
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    """Админ-панель управления пользователями."""
     list_display = (
-        'pk',
+        'id',
         'login',
         'email',
         'first_name',
         'last_name',
     )
     list_filter = ('email', 'login')
-    search_fields = ('login',)
     empty_value_display = ('-пусто-')
 
 
-@admin.register(Follow)
-class FollowAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'author')
+@admin.register(Subscribe)
+class SubscribeAdmin(admin.ModelAdmin):
+    """Админ-панель управления подписками."""
+    list_display = (
+        'id', 
+        'user', 
+        'author'
+    )
     list_filter = ('user', 'author')
-    search_fields = ('author',)
     empty_value_display = ('-пусто-')
