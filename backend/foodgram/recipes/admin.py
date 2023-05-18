@@ -11,13 +11,11 @@ class RecipeAdmin(admin.ModelAdmin):
         'id',
         'name',
         'author',
-        'number_of_favorites'
+        #'number_of_favorites'
     )
     list_filter = ('author', 'name', 'tags')
     empty_value_display = ('-пусто-')
 
-    def number_of_favorites(self, obj):
-        return obj.number_of_favorites.all().count()
 
 
 @admin.register(Ingredient)

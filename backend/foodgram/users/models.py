@@ -11,7 +11,7 @@ class User(AbstractUser):
         (MODERATOR, 'moderator'),
         (USER, 'user'),
     )
-    login = models.CharField(
+    username = models.CharField(
         verbose_name='Логин',
         max_length=150,
         unique=True,
@@ -54,8 +54,8 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
         constraints = [
             models.UniqueConstraint(
-                fields=['login', 'email'],
-                name='unique_login_email'
+                fields=['username', 'email'],
+                name='unique_username_email'
             )
         ]
 

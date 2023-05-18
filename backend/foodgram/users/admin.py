@@ -8,12 +8,12 @@ class UserAdmin(admin.ModelAdmin):
     """Админ-панель управления пользователями."""
     list_display = (
         'id',
-        'login',
+        'username',
         'email',
         'first_name',
         'last_name',
     )
-    list_filter = ('email', 'login')
+    list_filter = ('email', 'username')
     empty_value_display = ('-пусто-')
 
 

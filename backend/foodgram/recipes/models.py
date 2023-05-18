@@ -1,6 +1,7 @@
 from colorfield.fields import ColorField
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 
 User = get_user_model()
 
@@ -35,12 +36,13 @@ class Tag(models.Model):
     )
     color = ColorField(
         format='hex',
+        max_length=7,
         unique=True,
         help_text='Выберите цвет',
         verbose_name='HEX-код цвета',
     )
     slug = models.SlugField(
-        max_length=150,
+        max_length=200,
         unique=True,
         verbose_name='Адрес',
     )
@@ -88,8 +90,14 @@ class Recipe(models.Model):
         verbose_name='Теги',
         help_text='Выберите теги',
     )
-
-    # Дописать cooking_time
+    cooking_time = models.PositiveIntegerField(
+        verbose_name='Время приготовления (в минутах)',
+        validators=[
+            MinValueValidator(
+                1, message='Время приготовление не может быть меньше 1 минуты.'
+                ),
+            ],
+        )
 
     class Meta:
         verbose_name = 'Рецепт'
@@ -111,8 +119,14 @@ class IngredientInRecipe(models.Model):
         on_delete=models.PROTECT,
         verbose_name='Ингредиент'
     )
-    
-    # Дописать amount
+    amount = models.PositiveSmallIntegerField(
+        verbose_name='Количество',
+        validators=[
+            MinValueValidator(
+                1, message='Количество не может быть меньше 1.'
+            )
+        ],
+    )
 
     class Meta:
         verbose_name = 'Ингредиент в рецепте'
