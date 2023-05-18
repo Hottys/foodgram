@@ -17,14 +17,13 @@ class RecipeAdmin(admin.ModelAdmin):
     empty_value_display = ('-пусто-')
 
 
-
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     """Админ-панель управления ингредиентами."""
     list_display = (
         'id',
         'name',
-        'measure_unit'
+        'measurement_unit'
     )
     list_filter = ('name',)
     empty_value_display = ('-пусто-')
