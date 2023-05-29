@@ -25,5 +25,4 @@ class SubscribeAdmin(admin.ModelAdmin):
         'user', 
         'author'
     )
-    list_filter = ('user', 'author')
     empty_value_display = ('-пусто-')

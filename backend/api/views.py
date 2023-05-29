@@ -1,27 +1,25 @@
-from datetime import datetime
-
 from django.db.models import Sum
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
 from django_filters.rest_framework import DjangoFilterBackend
-from recipes.models import (FavoriteRecipe, Ingredient, IngredientInRecipe,
-                            Recipe, ShoppingList, Tag)
+from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from users.models import Subscribe, User
 
-from .filters import FilterIngredient, FilterRecipe
+from users.models import Subscribe, User
+from .filters import FilterRecipe
 from .pagination import CustomPagination
 from .permissions import AuthorsPermission
-from .serializers import (CreateRecipeSerializer, IngredientSerializer,
-                          RecipeSerializer, RecipeShortSerializer,
-                          SubscribeSerializer, TagSerializer, UserSerializer,
-                          FavoriteRecipeSerializer, ShoppingListSerializer)
+from recipes.models import (FavoriteRecipe, Ingredient, IngredientInRecipe,
+                            Recipe, ShoppingList, Tag)
+from .serializers import (CreateRecipeSerializer, FavoriteRecipeSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          ShoppingListSerializer, SubscribeSerializer,
+                          TagSerializer, UserSerializer)
 
 
 class TagViewSet(ReadOnlyModelViewSet):
@@ -33,7 +31,7 @@ class TagViewSet(ReadOnlyModelViewSet):
 
 
 class IngredientViewSet(ModelViewSet):
-    """Работа с ингридиентами"""
+    """Работа с ингридиентами."""
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -41,6 +39,7 @@ class IngredientViewSet(ModelViewSet):
 
 
 class UserViewSet(UserViewSet):
+    """Работа с пользователями."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = CustomPagination
@@ -77,7 +76,7 @@ class UserViewSet(UserViewSet):
             )
         Subscribe.objects.create(user=request.user, author=author)
         serializer = SubscribeSerializer(
-            author, context={'request': request,}
+            author, context={'request': request}
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -139,7 +138,7 @@ class RecipeViewSet(ModelViewSet):
         return response
 
     @action(
-        detail=False, 
+        detail=False,
         methods=['GET']
     )
     def download_shopping_cart(self, request):
@@ -151,7 +150,7 @@ class RecipeViewSet(ModelViewSet):
         return self.create_shopping_cart(ingredients)
 
     @action(
-        detail=True, 
+        detail=True,
         methods=['POST']
     )
     def shopping_cart(self, request, pk):
@@ -165,7 +164,7 @@ class RecipeViewSet(ModelViewSet):
             request=request, pk=pk, model=ShoppingList)
 
     @action(
-        detail=True, 
+        detail=True,
         methods=['POST']
     )
     def favorite(self, request, pk):

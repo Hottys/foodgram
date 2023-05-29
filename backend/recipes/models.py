@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    """Модель ингридиента."""
+    """Модель ингридиентов."""
     name = models.CharField(
         max_length=200,
         verbose_name='Название ингредиента',

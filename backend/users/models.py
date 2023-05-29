@@ -4,14 +4,6 @@ from django.db import models
 
 class User(AbstractUser):
     """Модель пользователя."""
-    ADMIN = 'admin'
-    MODERATOR = 'moderator'
-    USER = 'user'
-    ROLES = (
-        (ADMIN, 'admin'),
-        (MODERATOR, 'moderator'),
-        (USER, 'user'),
-    )
     username = models.CharField(
         verbose_name='Логин',
         max_length=150,
@@ -37,17 +29,6 @@ class User(AbstractUser):
         max_length=150,
         blank=True,
     )
-
-    @property
-    def is_moderator(self):
-        return self.role == self.MODERATOR
-
-    @property
-    def is_admin(self):
-        return (
-            self.role == self.ADMIN
-            or self.is_superuser
-        )
 
     class Meta:
         ordering = ('id',)

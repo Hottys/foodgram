@@ -6,12 +6,11 @@ from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers, status
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import ModelSerializer
 
 
 from recipes.models import (FavoriteRecipe, Ingredient, IngredientInRecipe,
                             Recipe, Tag, ShoppingList)
-from users.models import Subscribe, User
+from users.models import User
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -87,6 +86,7 @@ class UserSerializer(UserSerializer):
 
 
 class SubscribeSerializer(UserSerializer):
+    """Сериализатор для подписок."""
     recipes_count = SerializerMethodField()
     recipes = SerializerMethodField()
 
@@ -134,6 +134,7 @@ class SubscribeSerializer(UserSerializer):
 
 
 class IngredientInRecipeSerializer(serializers.ModelSerializer):
+    """Сериализатор для ингридиентов в рецепте."""
     id = serializers.IntegerField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
@@ -273,7 +274,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             'request': self.context.get('request')
         }).data
 
+
 class RecipeShortSerializer(serializers.ModelSerializer):
+    """Сериализатор для короткого отображения рецепта."""
     class Meta:
         model = Recipe
         fields = (
@@ -283,7 +286,9 @@ class RecipeShortSerializer(serializers.ModelSerializer):
             'cooking_time'
         )
 
+
 class FavoriteRecipeSerializer(serializers.ModelSerializer):
+    """Сериализатор для избранных рецептов."""
     class Meta:
         model = FavoriteRecipe
         fields = (
@@ -305,7 +310,9 @@ class FavoriteRecipeSerializer(serializers.ModelSerializer):
             context={'request': self.context.get('request')}
         ).data
 
+
 class ShoppingListSerializer(serializers.ModelSerializer):
+    """Сериализатор для списка покупок."""
     class Meta:
         model = ShoppingList
         fields = (

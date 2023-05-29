@@ -9,12 +9,16 @@ class RecipeAdmin(admin.ModelAdmin):
     """Админ-панель управления рецептами."""
     list_display = (
         'id',
-        'name',
         'author',
-        #'number_of_favorites'
+        'name',
+        'cooking_time',
+        'number_of_favorites'
     )
     list_filter = ('author', 'name', 'tags')
     empty_value_display = ('-пусто-')
+
+    def number_of_favorites(self, obj):
+        return obj.favorites.count()
 
 
 @admin.register(Ingredient)
