@@ -7,10 +7,9 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Не забыть спрятать!
-SECRET_KEY = 'django-insecure-p&p!!u&k0z=14v%fhh!89_ir&1#29ya3^i#)#6_18yz56mxzn1'
+SECRET_KEY = os.getenv('SECRET_KEY', default='default_secret_key')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*'] 
 
@@ -61,36 +60,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-# Подумать, возможно оставить
-if DEBUG:
-    DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.sqlite3',
-           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-       }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': os.getenv(
-                'DB_ENGINE', default='django.db.backends.postgresql'
-            ),
-            'NAME': os.getenv(
-                'DB_NAME', default='postgres'),
-            'USER': os.getenv(
-                'POSTGRES_USER', default='postgres'
-            ),
-            'PASSWORD': os.getenv(
-                'POSTGRES_PASSWORD', default='postgres'
-            ),
-            'HOST': os.getenv(
-                'DB_HOST', default='db'
-            ),
-            'PORT': os.getenv(
-                'DB_PORT', default='5432'
-            )
-        }
-    }
+load_dotenv(os.path.join(BASE_DIR.parent.parent, 'infra/.env'), verbose=True)
+DATABASES = {
+   'default': {
+       'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+       'NAME': os.environ.get('POSTGRES_DB', BASE_DIR / 'db.sqlite3'),
+       'USER': os.environ.get('POSTGRES_USER'),
+       'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+       'HOST': os.environ.get('DB_HOST'),
+       'PORT': os.environ.get('DB_PORT'),
+   }
+}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -129,22 +110,24 @@ AUTH_USER_MODEL = 'users.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny', 
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
     ],
-
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
 }
 
 DJOSER = {
-    'LOGIN_FIELD': 'email',
-    'HIDE_USERS': False,
-    'SERIALIZERS': {
-        'user': 'api.serializers.UserSerializer',
-        'user_list': 'api.serializers.UserSerializer',
-        'current_user': 'api.serializers.UserSerializer',
-        'user_create': 'api.serializers.UserSerializer',
+    "SERIALIZERS": {
+        "user_create": "api.serializers.UserCreateSerializer",
+        "user": "api.serializers.UserSerializer",
+        "current_user": "api.serializers.UserSerializer",
     },
+    "PERMISSIONS": {
+        "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+        "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
+    },
+    'LOGIN_FIELD': 'email',
+    "HIDE_USERS": False,
 }

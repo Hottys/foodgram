@@ -41,18 +41,6 @@ class TagAdmin(admin.ModelAdmin):
     empty_value_display = ('-пусто-')
 
 
-@admin.register(IngredientInRecipe)
-class IngredientInRecipeAdmin(admin.ModelAdmin):
-    """Админ-панель управления ингредиентами в рецептах."""
-    list_display = (
-        'id',
-        'recipe',
-        'ingredient',
-       #'amount',
-    )
-    empty_value_display = ('-пусто-')
-
-
 @admin.register(FavoriteRecipe)
 class FavoriteRecipeAdmin(admin.ModelAdmin):
     """Админ-панель управления избранными рецептами."""
