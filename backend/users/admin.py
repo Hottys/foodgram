@@ -21,8 +21,8 @@ class UserAdmin(admin.ModelAdmin):
 class SubscribeAdmin(admin.ModelAdmin):
     """Админ-панель управления подписками."""
     list_display = (
-        'id', 
-        'user', 
+        'id',
+        'user',
         'author'
     )
     empty_value_display = ('-пусто-')

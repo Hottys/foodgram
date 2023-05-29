@@ -101,7 +101,7 @@ class Recipe(models.Model):
                 1, message='Время приготовление не может быть меньше 1 минуты.'
             ),
             MaxValueValidator(
-            1440, message='Время приготовления - не больше 24 часов!'
+                1440, message='Время приготовления - не больше 24 часов!'
             )
             ],
         )
@@ -147,6 +147,7 @@ class IngredientInRecipe(models.Model):
     def __str__(self):
         return f'{self.recipe}. {self.ingredient}, {self.amount}'
 
+
 class FavoriteRecipe(models.Model):
     """Модель избранного."""
     user = models.ForeignKey(
@@ -168,6 +169,7 @@ class FavoriteRecipe(models.Model):
 
     def __str__(self):
         return f'{self.user} добавил в избранное {self.recipe}'
+
 
 class ShoppingList(models.Model):
     """Модель списка покупок."""

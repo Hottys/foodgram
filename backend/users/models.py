@@ -8,7 +8,7 @@ class User(AbstractUser):
         verbose_name='Логин',
         max_length=150,
         unique=True,
-        blank=True,    
+        blank=True,
     )
     password = models.CharField(
         verbose_name='Пароль',
