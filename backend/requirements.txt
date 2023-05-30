@@ -1,0 +1,9 @@
+Django==3.2.16
+django-filter==23.2
+djangorestframework==3.14.0
+django-colorfield==0.8.0
+djoser==2.1.0
+drf-extra-fields==3.5.0
+pip==23.1.2
+python-dotenv==0.21.1
+flake8==5.0.4

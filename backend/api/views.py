@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.contrib.auth import get_user_model
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -10,7 +11,7 @@ from rest_framework.permissions import (IsAuthenticated,
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from users.models import Subscribe, User
+from users.models import Subscribe
 from .filters import FilterRecipe
 from .pagination import CustomPagination
 from .permissions import AuthorsPermission
@@ -21,6 +22,8 @@ from .serializers import (CreateRecipeSerializer, FavoriteRecipeSerializer,
                           ShoppingListSerializer, SubscribeSerializer,
                           TagSerializer, UserSerializer)
 
+User = get_user_model()
+
 
 class TagViewSet(ReadOnlyModelViewSet):
     """Вывод тегов."""
@@ -30,7 +33,7 @@ class TagViewSet(ReadOnlyModelViewSet):
     pagination_class = None
 
 
-class IngredientViewSet(ModelViewSet):
+class IngredientViewSet(ReadOnlyModelViewSet):
     """Работа с ингридиентами."""
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
