@@ -1,5 +1,5 @@
-from django.db.models import Sum
 from django.contrib.auth import get_user_model
+from django.db.models import Sum
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -11,14 +11,14 @@ from rest_framework.permissions import (IsAuthenticated,
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from users.models import Subscribe
-from .filters import FilterRecipe
-from .pagination import CustomPagination
-from .permissions import AuthorsPermission
 from recipes.models import (FavoriteRecipe, Ingredient, IngredientInRecipe,
                             Recipe, ShoppingList, Tag)
-from .serializers import (RecipeCreateSerializer, RecipeFavoriteSerializer,
-                          IngredientSerializer, RecipeSerializer,
+from users.models import Subscribe
+
+from .filters import FilterRecipe
+from .permissions import AuthorsPermission
+from .serializers import (IngredientSerializer, RecipeCreateSerializer,
+                          RecipeFavoriteSerializer, RecipeSerializer,
                           ShoppingListSerializer, SubscribeSerializer,
                           TagSerializer, UserSerializer)
 
@@ -48,7 +48,7 @@ class UserViewSet(UserViewSet):
 
     @action(
         detail=True,
-        methods=['POST',],
+        methods=['POST'],
         permission_classes=[IsAuthenticated],
     )
     def subscribe(self, request, id):
@@ -80,7 +80,6 @@ class UserViewSet(UserViewSet):
                 {'errors': 'Невозможно удалить несуществующую подписку.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
         sub.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
