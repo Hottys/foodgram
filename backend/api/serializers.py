@@ -102,31 +102,9 @@ class SubscribeSerializer(UserSerializer):
             'recipes_count',
         )
 
-    def validate(self, data):
-        author_id = self.context.get(
-            'request').parser_context.get('kwargs').get('id')
-        author = get_object_or_404(User, id=author_id)
-        user = self.context.get('request').user
-        if user.subscriber.filter(author=author_id).exists():
-            raise ValidationError(
-                'Подписка уже существует',
-                code=status.HTTP_400_BAD_REQUEST,
-            )
-        if user == author:
-            raise ValidationError(
-                'Нельзя подписаться на самого себя',
-                code=status.HTTP_400_BAD_REQUEST,
-            )
-        return data
-
     def get_recipes(self, obj):
-        request = self.context.get('request')
-        limit = request.GET.get('recipes_limit')
-        recipes = obj.recipes.all()
-        if limit:
-            recipes = recipes[: int(limit)]
-        serializer = RecipeShortSerializer(recipes, many=True, read_only=True)
-        return serializer.data
+        author = obj.recipes.all()
+        return RecipeShortSerializer(author, many=True).data
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -194,7 +172,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         return obj.shopping_list.filter(user=request.user).exists()
 
 
-class CreateRecipeSerializer(serializers.ModelSerializer):
+class RecipeCreateSerializer(serializers.ModelSerializer):
     """Создание рецепта."""
     ingredients = IngredientInRecipeSerializer(
         many=True,
@@ -286,7 +264,7 @@ class RecipeShortSerializer(serializers.ModelSerializer):
         )
 
 
-class FavoriteRecipeSerializer(serializers.ModelSerializer):
+class RecipeFavoriteSerializer(serializers.ModelSerializer):
     """Сериализатор для избранных рецептов."""
     class Meta:
         model = FavoriteRecipe
