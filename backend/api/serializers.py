@@ -3,11 +3,10 @@ import re
 from django.core.exceptions import ValidationError
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
-
 from recipes.models import (FavoriteRecipe, Ingredient, IngredientInRecipe,
                             Recipe, ShoppingList, Tag)
+from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 from users.models import User
 
 
