@@ -8,12 +8,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .models import FavoriteRecipe, IngredientInRecipe, Recipe, ShoppingList
+from api.permissions import AuthorsPermission
+from api.recipes_api.serializers import (RecipeCreateSerializer,
+                                         RecipeFavoriteSerializer,
+                                         RecipeSerializer,
+                                         ShoppingListSerializer)
 
 from .filters import FilterRecipe
-from api.permissions import AuthorsPermission
-from api.serializers import (RecipeCreateSerializer, RecipeFavoriteSerializer,
-                             RecipeSerializer, ShoppingListSerializer)
+from .models import FavoriteRecipe, IngredientInRecipe, Recipe, ShoppingList
 
 User = get_user_model()
 

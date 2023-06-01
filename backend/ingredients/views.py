@@ -1,7 +1,9 @@
-from .models import Ingredient
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from api.serializers import IngredientSerializer
+
+from api.ingredients_api.serializers import IngredientSerializer
+
+from .models import Ingredient
 
 
 class IngredientViewSet(ReadOnlyModelViewSet):
