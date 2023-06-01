@@ -1,12 +1,11 @@
+from api.tags_api.serializers import TagSerializer
 from django.core.exceptions import ValidationError
 from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
-
-from api.tags_api.serializers import TagSerializer
 from recipes.models import (FavoriteRecipe, IngredientInRecipe, Recipe,
                             ShoppingList)
+from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 from tags.models import Tag
 
 
