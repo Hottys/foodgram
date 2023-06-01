@@ -1,6 +1,6 @@
 ## Проект Foodgram
 
-![workflow](https://github.com/Hottys/foodgram-project-react/blob/master/.github/workflows/main.yml)
+![example workflow](https://github.com/Hottys/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 Foodgram - продуктовый помощник с базой кулинарных рецептов. Позволяет публиковать рецепты, сохранять избранные, а также формировать список покупок для выбранных рецептов. Можно подписываться на любимых авторов.
 
