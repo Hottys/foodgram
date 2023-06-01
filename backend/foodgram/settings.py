@@ -16,8 +16,6 @@ if not SECRET_KEY:
     print('Ошибка, нет ключа')
     sys.exit()
 
-sys.setdefaultencoding('utf-8')
-
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
