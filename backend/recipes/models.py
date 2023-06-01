@@ -1,62 +1,10 @@
-from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from tags.models import Tag
+from ingredients.models import Ingredient
 
 User = get_user_model()
-
-
-class Ingredient(models.Model):
-    """Модель ингридиентов."""
-    name = models.CharField(
-        max_length=200,
-        verbose_name='Название ингредиента',
-        help_text='Введите название ингредиента',
-    )
-    measurement_unit = models.CharField(
-        max_length=10,
-        verbose_name='Единица измерения',
-        help_text='Единица измерения',
-    )
-
-    class Meta:
-        verbose_name = 'Ингредиент'
-        verbose_name_plural = 'Ингредиенты'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['name', 'measurement_unit'],
-                name='unique_name_measurement_unit')]
-
-    def __str__(self):
-        return f'{self.name}, {self.measurement_unit}'
-
-
-class Tag(models.Model):
-    """Модель тега."""
-    name = models.CharField(
-        max_length=200,
-        verbose_name='Название тега',
-        help_text='Название тега',
-    )
-    color = ColorField(
-        format='hex',
-        max_length=7,
-        unique=True,
-        help_text='Выберите цвет',
-        verbose_name='HEX-код цвета',
-    )
-    slug = models.SlugField(
-        max_length=200,
-        unique=True,
-        verbose_name='Адрес',
-    )
-
-    class Meta:
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
-
-    def __str__(self):
-        return self.name
 
 
 class Recipe(models.Model):
