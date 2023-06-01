@@ -16,7 +16,7 @@ if not SECRET_KEY:
     print('Ошибка, нет ключа')
     sys.exit()
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
