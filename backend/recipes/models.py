@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
 from ingredients.models import Ingredient
 from tags.models import Tag
 
@@ -53,8 +54,13 @@ class Recipe(models.Model):
             )
         ],
     )
+    pub_date = models.DateTimeField(
+        'Дата публикации',
+        auto_now_add=True,
+    )
 
     class Meta:
+        ordering = ('-pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
@@ -114,6 +120,12 @@ class FavoriteRecipe(models.Model):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные рецепты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_favorite_recipe'
+            )
+        ]
 
     def __str__(self):
         return f'{self.user} добавил в избранное {self.recipe}'
@@ -136,7 +148,13 @@ class ShoppingList(models.Model):
 
     class Meta:
         verbose_name = 'Список покупок'
-        verbose_name_plural = 'Списки покупок'
+        verbose_name_plural = 'Список покупок'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_shopping_list_recipe'
+            )
+        ]
 
     def __str__(self):
         return f'{self.user} добавил в список покупок {self.recipe}'

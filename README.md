@@ -114,7 +114,7 @@ docker-compose -f docker-compose-local.yml up -d
 http://mkartavcev.ddns.net/admin
 Логин: admin (суперюзер)
 Email: mkartavcev.corp@gmail.com
-Пароль: 3299food3299
+Пароль: 3299
 
 ### Автор:
 

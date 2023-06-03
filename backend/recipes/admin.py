@@ -15,6 +15,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'author',
         'name',
         'cooking_time',
+        'pub_date',
         'number_of_favorites'
     )
     list_filter = ('author', 'name', 'tags')
@@ -47,5 +48,17 @@ class ShoppingListAdmin(admin.ModelAdmin):
         'id',
         'user',
         'recipe',
+    )
+    empty_value_display = ('-пусто-')
+
+
+@admin.register(IngredientInRecipe)
+class IngredientInRecipeAdmin(admin.ModelAdmin):
+    """Админ-панель управления ингредиентами в рецептах."""
+    list_display = (
+        'id',
+        'recipe',
+        'ingredient',
+        'amount',
     )
     empty_value_display = ('-пусто-')

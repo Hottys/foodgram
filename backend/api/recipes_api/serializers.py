@@ -1,11 +1,12 @@
-from api.tags_api.serializers import TagSerializer
-from django.core.exceptions import ValidationError
-from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+from rest_framework.fields import SerializerMethodField
+
+from api.tags_api.serializers import TagSerializer
+from api.users_api.serializers import UserSerializer
 from recipes.models import (FavoriteRecipe, IngredientInRecipe, Recipe,
                             ShoppingList)
-from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
 from tags.models import Tag
 
 
@@ -98,22 +99,20 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'cooking_time',
         )
 
-    def validate_ingredients(self, ingredients):
-        ing = self.initial_data.get('ingredients')
-        ingredients_list = []
-        if not ing:
+    def validate(self, data):
+        ingredients = self.initial_data.get('ingredients')
+        if not ingredients:
             raise serializers.ValidationError('Отсутствуют ингредиенты')
-        for ingredient in ing:
+        ingredients_list = []
+        for ingredient in ingredients:
             if ingredient['id'] in ingredients_list:
-                raise ValidationError('Ингридиенты не могут повторяться')
-            ingredients_list.append(ingredient['id'])
-        return ingredients
-
-    def validate_tags(self, tags):
-        for tag in tags:
-            if not Tag.objects.filter(id=tag.id).exists():
-                raise ValidationError('Тега не существует')
-        return tags
+                raise serializers.ValidationError(
+                    'Ингридиенты не могут повторяться'
+                )
+            if int(ingredient['amount']) <= 0:
+                raise ValidationError('Количество не может быть меньше 1.')
+            ingredients_list.append(ingredient.get('id'))
+        return data
 
     @staticmethod
     def create_ingredients(recipe, ingredients):

@@ -132,26 +132,27 @@ AUTH_USER_MODEL = 'users.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
     ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ],
-    "DEFAULT_PAGINATION_CLASS": "api.pagination.CustomPagination",
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
 }
 
 DJOSER = {
-    "SERIALIZERS": {
-        "user_create": "api.users_api.serializers.UserCreateSerializer",
-        "user": "api.users_api.serializers.UserSerializer",
-        "current_user": "api.users_api.serializers.UserSerializer",
+    'SERIALIZERS': {
+        'user_create': 'api.users_api.serializers.UserCreateSerializer',
+        'user': 'api.users_api.serializers.UserSerializer',
+        'current_user': 'api.users_api.serializers.UserSerializer',
+        'recipe_create': 'api.recipes_api.serializers.RecipeCreateSerializer',
     },
-    "PERMISSIONS": {
-        "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
-        "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
+    'PERMISSIONS': {
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
+        'user_list': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
     },
-    "HIDE_USERS": False,
+    'HIDE_USERS': False,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': False,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': False,
     'SEND_CONFIRMATION_EMAIL': False,

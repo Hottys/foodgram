@@ -1,8 +1,8 @@
-from api.recipes_api.serializers import TagSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .models import Tag
+from api.recipes_api.serializers import TagSerializer
+from tags.models import Tag
 
 
 class TagViewSet(ReadOnlyModelViewSet):

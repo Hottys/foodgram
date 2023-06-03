@@ -1,10 +1,11 @@
 import re
 
-from api.recipes_api.serializers import RecipeShortSerializer
 from django.core.exceptions import ValidationError
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+
+from recipes.models import Recipe
 from users.models import User
 
 
@@ -57,6 +58,18 @@ class UserSerializer(UserSerializer):
         return obj.subscribing.filter(user=request.user).exists()
 
 
+class SubscribeRecipeShortSerializer(serializers.ModelSerializer):
+    """Сериализатор для короткого отображения рецепта."""
+    class Meta:
+        model = Recipe
+        fields = (
+            'id',
+            'name',
+            'image',
+            'cooking_time'
+        )
+
+
 class SubscribeSerializer(UserSerializer):
     """Сериализатор для подписок."""
     recipes_count = SerializerMethodField()
@@ -77,7 +90,7 @@ class SubscribeSerializer(UserSerializer):
 
     def get_recipes(self, obj):
         author = obj.recipes.all()
-        return RecipeShortSerializer(author, many=True).data
+        return SubscribeRecipeShortSerializer(author, many=True).data
 
     def get_recipes_count(self, obj):
-        return obj.recipes.count()
+        return obj.subscribing.count()
