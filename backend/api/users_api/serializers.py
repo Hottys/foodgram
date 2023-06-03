@@ -2,10 +2,9 @@ import re
 
 from django.core.exceptions import ValidationError
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from recipes.models import Recipe
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-
-from recipes.models import Recipe
 from users.models import User
 
 

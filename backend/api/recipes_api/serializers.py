@@ -1,12 +1,11 @@
+from api.tags_api.serializers import TagSerializer
+from api.users_api.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
+from recipes.models import (FavoriteRecipe, IngredientInRecipe, Recipe,
+                            ShoppingList)
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
-
-from api.tags_api.serializers import TagSerializer
-from api.users_api.serializers import UserSerializer
-from recipes.models import (FavoriteRecipe, IngredientInRecipe, Recipe,
-                            ShoppingList)
 from tags.models import Tag
 
 
