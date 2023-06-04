@@ -93,4 +93,4 @@ class SubscribeSerializer(UserSerializer):
         return SubscribeRecipeShortSerializer(author, many=True).data
 
     def get_recipes_count(self, obj):
-        return obj.subscribing.count()
+        return obj.recipes.count()

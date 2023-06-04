@@ -6,7 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.users_api.serializers import SubscribeSerializer, UserSerializer
+from api.users_api.serializers import (SubscribeRecipeShortSerializer,
+                                       SubscribeSerializer, UserSerializer)
 from users.models import Subscribe
 
 User = get_user_model()
@@ -16,6 +17,15 @@ class UserViewSet(UserViewSet):
     """Работа с пользователями."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_recipes(self, user, limit=None):
+        recipes = user.recipes.all()
+        if limit:
+            recipes = recipes[:int(limit)]
+        serializer = SubscribeRecipeShortSerializer(
+            recipes, many=True, read_only=True
+        )
+        return serializer.data
 
     @action(
         detail=True,
@@ -65,4 +75,9 @@ class UserViewSet(UserViewSet):
         serializer = SubscribeSerializer(
             pages, many=True, context={'request': request}
         )
+        for user_data in serializer.data:
+            user = User.objects.get(id=user_data['id'])
+            recipes_limit = request.GET.get('recipes_limit')
+            user_data['recipes'] = self.get_recipes(user, recipes_limit)
+            user_data['recipes_count'] = user.recipes.count()
         return self.get_paginated_response(serializer.data)
