@@ -1,5 +1,6 @@
 import re
 
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
@@ -32,6 +33,8 @@ class UserCreateSerializer(UserCreateSerializer):
             raise ValidationError(
                 ('Недопустимые символы в username'),
             )
+        password = data.get('password', '')
+        validate_password(password)
         return data
 
 

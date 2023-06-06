@@ -1,8 +1,14 @@
+from io import BytesIO
+
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
+from django.http import HttpResponse
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -34,26 +40,47 @@ class RecipeViewSet(ModelViewSet):
         return RecipeCreateSerializer
 
     @staticmethod
-    def create_shopping_cart(ingredients):
-        shopping_list = 'Купить в магазине:'
+    def create_shopping_cart(ingredients, user):
+        buffer = BytesIO()
+        p = canvas.Canvas(buffer)
+        pdfmetrics.registerFont(
+            TTFont('DejaVuSans', 'api/recipes_api/fonts/DejaVuSans.ttf')
+        )
+        p.setFont('DejaVuSans', 16)
+        p.drawCentredString(
+            300, 750, f'Список покупок для пользователя {user}'
+        )
+        x = 100
+        y = 700
+        p.setFont('DejaVuSans', 12)
         for ingredient in ingredients:
-            shopping_list += (
-                f"\n{ingredient['ingredient__name']} "
-                f"({ingredient['ingredient__measurement_unit']}) - "
-                f"{ingredient['ingredient_value']}")
-        file = 'shopping_list.txt'
-        response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename="{file}.txt"'
+            name = ingredient['ingredient__name']
+            measurement_unit = ingredient['ingredient__measurement_unit']
+            value = ingredient['ingredient_value']
+            text = f'{name} ({measurement_unit}) - {value}'
+            p.drawString(x, y, text)
+            y -= 20
+        p.showPage()
+        p.save()
+        buffer.seek(0)
+        pdf = buffer.getvalue()
+        buffer.close()
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = (
+            'attachment; filename="shopping_list.pdf'
+        )
+        response.write(pdf)
         return response
 
     @action(detail=False, methods=['GET'])
     def download_shopping_cart(self, request):
+        user = request.user
         ingredients = IngredientInRecipe.objects.filter(
             recipe__shopping_list__user=request.user
         ).order_by('ingredient__name').values(
             'ingredient__name', 'ingredient__measurement_unit'
         ).annotate(ingredient_value=Sum('amount'))
-        return self.create_shopping_cart(ingredients)
+        return self.create_shopping_cart(ingredients, user)
 
     @action(detail=True, methods=['POST'])
     def shopping_cart(self, request, pk):
