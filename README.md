@@ -109,13 +109,6 @@ SECRET_KEY='секретный ключ Django'
 docker-compose -f docker-compose-local.yml up -d
 ```
 
-Доступ в админ-панель:
-
-http://mkartavcev.ddns.net/admin
-Логин: mkartavcev (суперюзер)
-Email: mkartavcev.corp@gmail.com
-Пароль: 3299
-
 ### Автор:
 
 Михаил Картавцев
